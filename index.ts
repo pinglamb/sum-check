@@ -146,64 +146,43 @@ function main(): void {
   console.log(`${VAR}-variant polynomial: ${toStr(G)}`);
 
   const h = sum(G);
-  console.log("C1 =", h);
+  console.log("H =", h);
 
-  console.log("================================");
-  const g1 = gi(G, 0, []);
-  console.log(`g1: ${toStr(g1)}`);
-  const s1 = val(g1, [0]) + val(g1, [1]);
-  console.log("g1(0) + g1(1) =", s1);
-  if (s1 == h) {
-    console.log("g1(0) + g1(1) = C1, accept!");
-  } else {
-    console.log("g1(0) + g1(1) != C1, reject!");
-    return;
+  const r = [];
+  const R = [2, 3, 6];
+
+  let c = h;
+  for (let i = 0; i < VAR; i++) {
+    console.log("================================");
+    console.log(`c${i + 1} =`, c);
+    const gr = gi(G, i, r);
+    console.log(`g${i + 1}: ${toStr(gr)}`);
+    const xpad = [];
+    for (let j = 0; j < i; j++) {
+      xpad.push(0);
+    }
+    const sr = val(gr, xpad.concat([0])) + val(gr, xpad.concat([1]));
+    console.log(`g${i + 1}(0) + g${i + 1}(1) =`, sr);
+    if (sr == c) {
+      console.log(`g${i + 1}(0) + g${i + 1}(1) == c${i + 1}, accept!`);
+    } else {
+      console.log(`g${i + 1}(0) + g${i + 1}(1) != c${i + 1}, reject!`);
+      return;
+    }
+    r.push(R[i]);
+    console.log(`r${i + 1} =`, r[i]);
+    c = val(gr, r);
   }
-  const r1 = 2;
-  console.log("r1 =", r1);
 
   console.log("================================");
-  const g2 = gi(G, 1, [r1]);
-  console.log(`g2: ${toStr(g2)}`);
-  const s2 = val(g2, [0, 0]) + val(g2, [0, 1]);
-  console.log("g2(0) + g2(1) =", s2);
-  const g1r1 = val(g1, [r1]);
-  console.log("g1(r1) =", g1r1);
-  if (s2 == g1r1) {
-    console.log("g2(0) + g2(1) = g1(r1), accept!");
-  } else {
-    console.log("g2(0) + g2(1) != g1(r1), reject!");
-    return;
-  }
-  const r2 = 3;
-  console.log("r2 =", r2);
-
-  console.log("================================");
-  const g3 = gi(G, 2, [r1, r2]);
-  console.log(`g3: ${toStr(g3)}`);
-  const s3 = val(g3, [0, 0, 0]) + val(g3, [0, 0, 1]);
-  console.log("g3(0) + g3(1) =", s3);
-  const g2r2 = val(g2, [0, r2]);
-  console.log("g2(r2) =", g2r2);
-  if (s3 == g2r2) {
-    console.log("g3(0) + g3(1) = g2(r2), accept!");
-  } else {
-    console.log("g3(0) + g3(1) != g2(r2), reject!");
-    return;
-  }
-  const r3 = 6;
-  console.log("r3 =", r3);
-
-  console.log("================================");
-  const gr = val(G, [r1, r2, r3]);
+  console.log(`c${VAR} =`, c);
+  const gr = val(G, r);
   console.log("g(r) =", gr);
-  const g3r3 = val(g3, [0, 0, r3]);
-  console.log("g3(r3) =", g3r3);
-  if (gr == g3r3) {
-    console.log("g3(r3) = g(r), accept!");
+  if (gr == c) {
+    console.log(`g(r) == c${VAR}, accept!`);
     console.log("done!");
   } else {
-    console.log("g3(r3) != g(r), reject!");
+    console.log(`g(r) != c${VAR}, reject!`);
     return;
   }
 }
