@@ -1,14 +1,27 @@
 // number of vars
 const VAR = 3;
 const B = [0, 1];
+const FP = 128;
 
 // g(x1, x2, x3) = 2 * x1^3 + x1 * x3 + x2 * x3
 // [coefficient, [varlist]], 0: x1, 1: x2, ...
+// const G = [
+//   [2, [0, 0, 0]],
+//   [1, [0, 2]],
+//   [1, [1, 2]],
+// ];
 const G = [
-  [2, [0, 0, 0]],
-  [1, [0, 2]],
+  [3, [0, 0, 0, 1]],
+  [2, [0, 1, 2]],
   [1, [1, 2]],
+  [1, [2]],
 ];
+
+const R = [2, 3, 6];
+
+function rand(max: number): number {
+  return Math.floor(Math.random() * max);
+}
 
 function bits(x: number): number[] {
   const bits = [];
@@ -149,7 +162,6 @@ function main(): void {
   console.log("H =", h);
 
   const r = [];
-  const R = [2, 3, 6];
 
   let c = h;
   for (let i = 0; i < VAR; i++) {
@@ -169,7 +181,8 @@ function main(): void {
       console.log(`g${i + 1}(0) + g${i + 1}(1) != c${i + 1}, reject!`);
       return;
     }
-    r.push(R[i]);
+    // r.push(R[i]);
+    r.push(2 + rand(FP - 2));
     console.log(`r${i + 1} =`, r[i]);
     c = val(gr, r);
   }
